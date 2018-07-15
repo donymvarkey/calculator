@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CALCULATOR</title>
+</head>
+<style type="text/css">
+	@font-face {
+    	font-family: lcd;
+    	src: url(./fonts/lcd.ttf);
+	}
+	body{
+		margin: 0;
+		padding: 0;
+		background-color: #000;
+	}
+	.container{
+		position: relative;
+		width: 500px;
+		height: 400px;
+		top: 200px;
+		left: 30%;
+		border-radius: 5px;
+		background-color: #4a4444;
+	}
+	#calc-display{
+		text-align: right;
+		position: relative;
+		top: 25px;
+	    left: 8px;
+	    width: 478px;
+		background-color: #709070;
+		font-family: lcd;
+    	font-size: 30px;
+	}
+	.buttons-container-number{
+		position: relative;
+		top: 50px;
+    	left: 8px;
+		width: 345px;
+		height: 250px;
+		border: 1px solid white;
+	}
+	.buttons-container-operators{
+		position: relative;
+		float: right;
+	    top: -202px;
+	    width: 127px;
+	    height: 250px;
+	    right: 8px;
+		border: 1px solid white;
+	}
+	button{
+		width: 100px;
+	    height: 47px;
+	    margin: 5px;
+	    margin-top: 9px;
+	    margin-left: 7px;
+	}
+	*:focus{
+		outline: none;
+	}
+</style>
+<body>
+	<div class="container">
+		<textarea id="calc-display" rows="2" cols="50"></textarea>
+		<div class="buttons-container-number">
+			<button>7</button>
+			<button>8</button>
+			<button>9</button><br>
+			<button>4</button>
+			<button>5</button>
+			<button>6</button><br>
+			<button>1</button>
+			<button>2</button>
+			<button>3</button><br>
+			<button>.</button>
+			<button>0</button>
+			<button>C</button>
+		</div>
+		<div class="buttons-container-operators">
+			<button>-</button>
+			<button>+</button>
+			<button>*</button>
+			<button>/</button>
+		</div>
+	</div>
+	<script type="text/javascript">
+		
+		document.getElementById('calc-display').onkeypress = function(e){
+			e.preventDefault();
+			return false;
+		}
+
+		var bt_list = document.getElementsByTagName('button');			
+		var cmd = '';
+
+		for (var i = bt_list.length - 1; i >= 0; i--) {
+
+			bt_list[i].onclick = function(e){			
+				var tmp_ = e.target.innerHTML;
+				if( tmp_ == "C"){
+					cmd = "";
+				}else{
+					cmd += tmp_;
+				}
+				document.getElementById('calc-display').value = cmd; 			//Display user input
+			}
+		}
+
+		document.onkeydown = function(e){		//Backspace key
+			
+			if(cmd.length <= 0)					//avoid index error(0 to -1)
+				return;
+			if( e.keyCode == 8){				
+				cmd = cmd.substr(0,cmd.length-1);
+				document.getElementById('calc-display').value = cmd;
+			}
+		}
+
+		document.onkeypress = function(e){		//Enter key press
+			e.preventDefault();
+			//console.log(e);
+			if(e.keyCode == 13){	
+				if (cmd.length <= 0) 
+					return;						//KEYCODE 13 == enter
+				try{
+					var ans_ = eval(cmd);
+					cmd = ans_;
+					document.getElementById('calc-display').value = cmd;
+				}catch (e_){
+					alert("mal formed input");	//For wrong input
+				};
+			}
+			else if(e.keyCode >= 42 && e.keyCode <= 57){	//Key maps-numpad
+				cmd += e.key;
+				document.getElementById('calc-display').value = cmd;
+			}
+			
+			e.preventDefault();					//Prevent default action of enter key
+		}
+
+	</script>
+</body>
+</html>
